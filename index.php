@@ -11,5 +11,5 @@ include './src/Models/Router.php';
 
 $request = $_SERVER['REQUEST_URI'];
 $router = new Router($request);
-$router->get('/view/', './frontend/home');
-$router->get('/view/', 'frontend/student');
+$router->get('/setram/', './view/login');
+$router->get('/setram/register', './view/register');

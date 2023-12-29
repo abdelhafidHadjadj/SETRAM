@@ -56,6 +56,7 @@ class Card
             $stmt->bindParam(':Statut', $this->Statut, PDO::PARAM_STR);
             $stmt->bindParam(':ClientID', $this->ClientID, PDO::PARAM_STR);
             $stmt->bindParam(':SubscriptionID',  $this->SubscriptionID, PDO::PARAM_INT);
+            $stmt->bindParam(':cardID',  $cardID, PDO::PARAM_INT);
             $stmt->execute();
             return $stmt->rowCount();
         } catch (PDOException $e) {

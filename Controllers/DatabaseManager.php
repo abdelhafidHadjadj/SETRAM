@@ -50,7 +50,8 @@ class DataBaseManger
             AgentID INT,
             ClientID INT,
             PRIMARY KEY (`SubscriptionID`),
-            FOREIGN KEY (ClientID) REFERENCES Clients(ClientID)
+            FOREIGN KEY (ClientID) REFERENCES Clients(ClientID),
+            FOREIGN KEY (AgentID) REFERENCES Agents(AgentID)
             );
         CREATE TABLE IF NOT EXISTS CardSubscription(
             CardID INT AUTO_INCREMENT,
@@ -59,13 +60,13 @@ class DataBaseManger
             End_Date DATE,
             Statut varchar(50),
             AgentID INT,
-            ClientID varchar(50),
-            SubscriptionID varchar(50),
+            ClientID INT,
+            SubscriptionID INT,
             PRIMARY KEY (`CardID`),
             FOREIGN KEY (ClientID) REFERENCES Clients(ClientID),
             FOREIGN KEY (SubscriptionID) REFERENCES Subscriptions(SubscriptionID),
-            CONSTRAINT UN_Card UNIQUE (CardNumber)
-        );
+            UNIQUE(CardNumber)
+        )
         ";
 
         $x = $pdo->prepare($sql);
