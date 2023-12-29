@@ -9,11 +9,11 @@ class QueryManager
     {
         $this->pdo = $pdo;
     }
-    public function getCoursesByDepartment($departmentID)
+    public function getSubscriptionByClient($clientID)
     {
-        $req = "SELECT * FROM Courses WHERE DepartmentID = :departmentID";
+        $req = "SELECT * FROM Subscriptions WHERE ClientID = :clientID";
         $x = $this->pdo->prepare($req);
-        $x->bindParam(':departmentID', $departmentID, PDO::PARAM_INT);
+        $x->bindParam(':clientID', $clientID, PDO::PARAM_INT);
         $e = $x->execute();
         if ($e) {
             return $x->fetchAll(PDO::FETCH_ASSOC);
@@ -21,74 +21,88 @@ class QueryManager
             echo "Error";
         }
     }
-    public function findHighestGrade($studentID)
+
+    public function getCardByClient($clientID)
     {
-        $req = "SELECT MAX(Grade) as HighestGrade, MIN(Grade) as LowestGrade FROM Registrations WHERE StudentID = :studentID";
+        $req = "SELECT * FROM Cards WHERE ClientID = :clientID";
         $x = $this->pdo->prepare($req);
-        $x->bindParam(':studentID', $studentID, PDO::PARAM_INT);
+        $x->bindParam(':clientID', $clientID, PDO::PARAM_INT);
         $e = $x->execute();
         if ($e) {
             return $x->fetchAll(PDO::FETCH_ASSOC);
         } else {
-            echo "err";
+            echo "Error";
         }
     }
-    public function getTotalCreditHours($studentID)
+    public function getCardBySubscription($subscriptionID)
     {
-        $req = "SELECT SUM(CreditHours) as TotalCreditHours FROM Courses
-        INNER JOIN Registrations ON Courses.CourseID = Registrations.CourseID
-        WHERE Registrations.StudentID = :studentID";
+        $req = "SELECT * FROM Cards WHERE SubscriptionID = :subscriptionID";
         $x = $this->pdo->prepare($req);
-        $x->bindParam(':studentID', $studentID, PDO::PARAM_INT);
+        $x->bindParam(':subscriptionID', $subscriptionID, PDO::PARAM_INT);
         $e = $x->execute();
         if ($e) {
             return $x->fetchAll(PDO::FETCH_ASSOC);
         } else {
-            echo "err";
+            echo "Error";
         }
     }
-    public function getStudentByCourse($courseID)
-    {
-        $req = "SELECT Students.* FROM Students
-        INNER JOIN Registrations ON Students.StudentID = Registrations.StudentID
-        WHERE Registrations.CourseID = :courseID";
-        $x = $this->pdo->prepare($req);
-        $x->bindParam(':courseID', $courseID, PDO::PARAM_INT);
-        $e = $x->execute();
-        if ($e) {
-            return $x->fetchAll(PDO::FETCH_ASSOC);
-        } else {
-            echo "err";
-        }
-    }
-    public function getProfessorsWithMostCourses()
-    {
-        $req = "SELECT Professors.*,COUNT(Courses.CourseID) as CourseCount FROM Professors
-        INNER JOIN Courses ON Professors.ProfessorID = Courses.ProfessorID
-        GROUP BY Professors.ProfessorID
-        ORDER BY CourseCount DESC
-        LIMIT 1";
-        $x = $this->pdo->prepare($req);
-        $e = $x->execute();
-        if ($e) {
-            return $x->fetchAll(PDO::FETCH_ASSOC);
-        } else {
-            echo "err";
-        }
-    }
-    public function generateRegistrationReport()
-    {
-        $req = "SELECT Students.FirstName, Students.LastName, Courses.CourseName, Registrations.Grade
-        FROM Students
-        INNER JOIN Registrations ON Students.StudentID = Registrations.StudentID
-        INNER JOIN Courses ON Registrations.CourseID = Courses.CourseID
-        ";
-        $x = $this->pdo->prepare($req);
-        $e = $x->execute();
-        if ($e) {
-            return $x->fetchAll(PDO::FETCH_ASSOC);
-        } else {
-            echo "err";
-        }
-    }
+
+
+    // public function findHighestGrade($studentID)
+    // {
+    //     $req = "SELECT MAX(Grade) as HighestGrade, MIN(Grade) as LowestGrade FROM Registrations WHERE StudentID = :studentID";
+    //     $x = $this->pdo->prepare($req);
+    //     $x->bindParam(':studentID', $studentID, PDO::PARAM_INT);
+    //     $e = $x->execute();
+    //     if ($e) {
+    //         return $x->fetchAll(PDO::FETCH_ASSOC);
+    //     } else {
+    //         echo "err";
+    //     }
+    // }
+    // public function getTotalCreditHours($studentID)
+    // {
+    //     $req = "SELECT SUM(CreditHours) as TotalCreditHours FROM Courses
+    //     INNER JOIN Registrations ON Courses.CourseID = Registrations.CourseID
+    //     WHERE Registrations.StudentID = :studentID";
+    //     $x = $this->pdo->prepare($req);
+    //     $x->bindParam(':studentID', $studentID, PDO::PARAM_INT);
+    //     $e = $x->execute();
+    //     if ($e) {
+    //         return $x->fetchAll(PDO::FETCH_ASSOC);
+    //     } else {
+    //         echo "err";
+    //     }
+    // }
+
+    // public function getProfessorsWithMostCourses()
+    // {
+    //     $req = "SELECT Professors.*,COUNT(Courses.CourseID) as CourseCount FROM Professors
+    //     INNER JOIN Courses ON Professors.ProfessorID = Courses.ProfessorID
+    //     GROUP BY Professors.ProfessorID
+    //     ORDER BY CourseCount DESC
+    //     LIMIT 1";
+    //     $x = $this->pdo->prepare($req);
+    //     $e = $x->execute();
+    //     if ($e) {
+    //         return $x->fetchAll(PDO::FETCH_ASSOC);
+    //     } else {
+    //         echo "err";
+    //     }
+    // }
+    // public function generateRegistrationReport()
+    // {
+    //     $req = "SELECT Students.FirstName, Students.LastName, Courses.CourseName, Registrations.Grade
+    //     FROM Students
+    //     INNER JOIN Registrations ON Students.StudentID = Registrations.StudentID
+    //     INNER JOIN Courses ON Registrations.CourseID = Courses.CourseID
+    //     ";
+    //     $x = $this->pdo->prepare($req);
+    //     $e = $x->execute();
+    //     if ($e) {
+    //         return $x->fetchAll(PDO::FETCH_ASSOC);
+    //     } else {
+    //         echo "err";
+    //     }
+    // }
 }

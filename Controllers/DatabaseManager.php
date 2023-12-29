@@ -7,48 +7,65 @@ class DataBaseManger
     public static function createTables($pdo)
     {
         $sql = "
-        CREATE TABLE IF NOT EXISTS Departments(
-            DepartmentID INT PRIMARY KEY,
-            DepartmentName varchar(50),
-            DepartmentHead varchar(50),
-            Location varchar(50)
-        );
-
-        CREATE TABLE IF NOT EXISTS Students (
-            StudentID INT PRIMARY KEY,
+        CREATE TABLE IF NOT EXISTS Clients(
+            ClientID INT AUTO_INCREMENT,
             FirstName varchar(50),
             LastName varchar(50),
             DateOfBirth DATE,
             Email varchar(50),
-            DepartmentID INT,
-            FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID));
+            Phone INT,
+            Password varchar(50),
+            Gender varchar(50),
+            Category varchar(50),
+            Adresse varchar(50),
+            PRIMARY KEY (`ClientID`)
 
-         CREATE TABLE IF NOT EXISTS Professors(
-            ProfessorID INT PRIMARY KEY,
+        );
+
+        CREATE TABLE IF NOT EXISTS Agents (
+            AgentID INT AUTO_INCREMENT,
+            FirstName varchar(50),
+            LastName varchar(50),
+            DateOfBirth DATE,
+            Email varchar(50),
+            Password varchar(50),
+            PRIMARY KEY (`AgentID`)
+           );
+
+         CREATE TABLE IF NOT EXISTS Administrators(
+            AdminID INT AUTO_INCREMENT,
             FirstName varchar(50),
             LastName varchar(50),
             Email varchar(50),
-            DepartmentID INT,
-            FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID));
+            Password varchar(50),
+            PRIMARY KEY (`AdminID`)
+            );
 
-        CREATE TABLE IF NOT EXISTS Courses(
-            CourseID INT PRIMARY KEY,
-            CourseName varchar(50),
-            ProfessorID INT,
-            DepartmentID INT,
-            CreditHours INT,
-            FOREIGN KEY (ProfessorID) REFERENCES Professors(ProfessorID),
-            FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID));
-
-       
-        CREATE TABLE IF NOT EXISTS Registrations(
-            RegistrationID INT PRIMARY KEY,
-            StudentID INT,
-            CourseID INT,
-            RegistrationDate DATE,
-            Grade INT,
-            FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
-            FOREIGN KEY (CourseID) REFERENCES Courses(CourseID));
+        CREATE TABLE IF NOT EXISTS Subscriptions(
+            SubscriptionID INT AUTO_INCREMENT,
+            Type varchar(50),
+            Start_Date DATE,
+            End_Date DATE,
+            Amount INT,
+            AgentID INT,
+            ClientID INT,
+            PRIMARY KEY (`SubscriptionID`),
+            FOREIGN KEY (ClientID) REFERENCES Clients(ClientID)
+            );
+        CREATE TABLE IF NOT EXISTS CardSubscription(
+            CardID INT AUTO_INCREMENT,
+            CardNumber INT,
+            Start_Date DATE,
+            End_Date DATE,
+            Statut varchar(50),
+            AgentID INT,
+            ClientID varchar(50),
+            SubscriptionID varchar(50),
+            PRIMARY KEY (`CardID`),
+            FOREIGN KEY (ClientID) REFERENCES Clients(ClientID),
+            FOREIGN KEY (SubscriptionID) REFERENCES Subscriptions(SubscriptionID),
+            CONSTRAINT UN_Card UNIQUE (CardNumber)
+        );
         ";
 
         $x = $pdo->prepare($sql);
