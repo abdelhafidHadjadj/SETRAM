@@ -11,5 +11,8 @@ include './src/Models/Router.php';
 
 $request = $_SERVER['REQUEST_URI'];
 $router = new Router($request);
-$router->get('/setram/', './view/login');
-$router->get('/setram/register', './view/register');
+$router->get('/login', './views/login');
+$router->get('/register', './views/register');
+$router->get('/dashboard', './views/dashboard/dashboard');
+$router->get('/dashboard/subscription', './views/dashboard/subscripe');
+$router->get('/dashboard/profile', './views/dashboard/profile');

@@ -10,15 +10,15 @@ class AuthManager
     {
         $this->pdo = $pdo;
     }
-    public function registerClient($firstName, $lastName, $email, $password)
+    public function registerClient($firstName, $lastName, $phone, $email, $password)
     {
-        return $this->registerUser('Clients', $firstName, $lastName, $email, $password);
+        return $this->registerUser('Clients', $firstName, $lastName, $phone, $email, $password);
     }
-    public function registerAgent($firstName, $lastName, $email, $password)
+    public function registerAgent($firstName, $lastName, $phone, $email, $password)
     {
-        return $this->registerUser('Agents', $firstName, $lastName, $email, $password);
+        return $this->registerUser('Agents', $firstName, $lastName, $phone, $email, $password);
     }
-    public function registerUser($table, $firstName, $lastName, $email, $password)
+    public function registerUser($table, $firstName, $lastName, $phone,  $email, $password)
     {
         $firstNameExist = $this->checkFirstNameExist($table, $firstName);
         $lastNameExist = $this->checkLastNameExist($table, $lastName);
@@ -27,15 +27,17 @@ class AuthManager
             return "User Already exists.";
         }
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $req = "INSERT INTO $table (FirstName, LastName, Email, Password) VALUES (:firstName,:lastName,:email,:password)";
+        $req = "INSERT INTO $table (FirstName, LastName, Phone ,Email, Password) VALUES (:firstName,:lastName, :phone,:email,:password)";
         $stmt = $this->pdo->prepare($req);
         $stmt->bindParam(':firstName', $firstName, PDO::PARAM_STR);
         $stmt->bindParam(':lastName', $lastName, PDO::PARAM_STR);
+        $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->bindParam(':password', $password, PDO::PARAM_STR);
+        $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
         $e = $stmt->execute();
         if ($e) {
-            return "Registration successful.";
+            $lastInsertId = $this->pdo->lastInsertId();
+            return $lastInsertId;
         } else {
             return "Registration failed.";
         }
@@ -76,7 +78,7 @@ class AuthManager
         $userExists = $this->checkLoginCredentials($table, $email, $password);
 
         if ($userExists) {
-            return "Login successful.";
+            return $userExists;
         } else {
             return "Invalid login credentials.";
         }
@@ -84,29 +86,23 @@ class AuthManager
 
     private function checkLoginCredentials($table, $email, $password)
     {
-        $req = "SELECT COUNT(*) FROM $table WHERE email = :email AND password = :password";
+        $req = "SELECT FirstName, LastName, ClientID FROM $table WHERE Email = :email";
 
         $stmt = $this->pdo->prepare($req);
-        $stmt->bindParam("email", $email, PDO::PARAM_STR);
-        $stmt->bindParam("password", $password, PDO::PARAM_STR);
-        $e = $stmt->execute();
+        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
         $hashedPassword = $this->getHashedPassword($table, $email);
-        return password_verify($password, $hashedPassword) && $this->checkExistence($req, $email, $hashedPassword);
-    }
+        $e = $stmt->execute();
 
-    private function checkExistence($req, ...$params)
-    {
-        $statement = $this->pdo->prepare($req);
-        foreach ($params as $key => $value) {
-            $paramName = ":param{$key}";
-            $statement->bindParam($paramName, $value);
+
+        if ($e && password_verify($password, $hashedPassword)) {
+            $userDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $userDetails;
+        } else {
+            return false; // Invalid login credentials
         }
-
-        $statement->execute();
-        $count = $statement->fetchColumn();
-
-        return $count > 0;
     }
+
+
 
     private function getHashedPassword($table, $email)
     {
