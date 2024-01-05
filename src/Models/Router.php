@@ -65,7 +65,7 @@ class Router
             require $controllerFile;
         } else {
             // Handle file not found error gracefully
-            echo "Controller file not found.";
+            require('./views/404.php');
         }
     }
 }
