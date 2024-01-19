@@ -1,7 +1,13 @@
 <?php
+
 require('./Controllers/AuthManager.php');
-require('./config/config.php')
+require('./config/config.php');
+
+// $auth = new AuthManager($pdo);
+// $res =  $auth->registerAgent("agent1", "agent1", 046543, "agent@1", "agent1");
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,20 +15,20 @@ require('./config/config.php')
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../style/connexion.css">
-    <link rel="stylesheet" href="../../style/style.css">
+    <link rel="stylesheet" href="../../style/styleAdmin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sen:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <title>login</title>
 </head>
 
-<section class="loginSection">
-
+<body>
     <div class="firstPart">
         <div class="logoBox">
-            <img src="../assets/logo-setram.png" alt="">
+            <img src="../../assets/logo-setram.png" alt="">
         </div>
         <div class="formBox">
-            <h2>Login into your Account</h2>
-
+            <h2>Welcome Agent !</h2>
             <form method="post">
                 <div class="inputBox">
                     <label>Email</label>
@@ -34,20 +40,15 @@ require('./config/config.php')
                 </div>
                 <div class="checkTermsBox">
                     <input type="checkbox" name="" id="">
-                    <p>Remeber Password</p>
+                    <p>Remeber me </p>
                 </div>
                 <input type="submit" class="btnSubmit">
-
-                <div class="alreadyExistBox">
-                    <p>You dont have an Account <a href="http://localhost:8000/register">?Register</a> </p>
-                </div>
             </form>
         </div>
     </div>
-    <div class="secondPart">
 
-    </div>
-</section>
+</body>
+
 
 </html>
 
@@ -56,17 +57,22 @@ require('./config/config.php')
 
 
 if (isset($_POST['email'])) {
+
     $email = $_POST['email'];
     $password = $_POST['password'];
-    echo $email;
+
+
     $login = new AuthManager($pdo);
-    $res = $login->loginUser('Clients', $email, $password);
+
+
+    $res = $login->loginUser('Agents', $email, $password);
+
+    var_dump($res);
     if ($res) {
-        echo $res;
-        $id = $res['ClientID'];
+        $id = $res['AgentID'];
         $firstName = $res['FirstName'];
         $lastName = $res['LastName'];
         $_SESSION['username'] = $id . "_" . $firstName . "_" . $lastName;
-        header("Location: /dashboard/dashboard");
+        header("Location: /agent/profile");
     }
 }

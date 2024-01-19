@@ -1,0 +1,40 @@
+aside {
+    background-image: url(/assets/tramway.png);
+    background-size: cover;
+    height: 100%;
+    
+}
+
+.bg-layer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: #030110BF;
+    height: 100%;
+}
+
+aside a p{
+    color: var(--primary-color);
+}
+
+aside a{
+display: flex;
+flex-direction: row;
+align-items: center;
+gap: 20px;
+}
+
+aside .sbLinksBox {
+    display: flex;
+    justify-content: center;
+    height: 40%;
+    width: 100%;
+
+
+}
+aside ul {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;    
+    justify-content: space-evenly;
+}

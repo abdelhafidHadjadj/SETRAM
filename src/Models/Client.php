@@ -45,12 +45,12 @@ class Client
             $stmt->bindParam(':Gender', $this->Gender, PDO::PARAM_STR);
             $stmt->bindParam(':Avatar', $this->Avatar, PDO::PARAM_STR);
             $stmt->bindParam(':Adresse', $this->Adresse, PDO::PARAM_STR);
-            $stmt->bindParam(':AgentID', $this->AgentID, PDO::PARAM_STR);
-            $stmt->bindParam(':AdminID', $this->AdminID, PDO::PARAM_STR);
+            $stmt->bindParam(':AgentID', $this->AgentID, PDO::PARAM_INT);
+            $stmt->bindParam(':AdminID', $this->AdminID, PDO::PARAM_INT);
             $stmt->execute();
             return $pdo->lastInsertId();
         } catch (PDOException $e) {
-            die("Error adding course: " . $e->getMessage());
+            die("Error adding client: " . $e->getMessage());
         }
     }
 
@@ -58,7 +58,7 @@ class Client
     {
         try {
             $req = "UPDATE Clients
-                    SET FirstName = :firstName, LastName = :lastName, DateOfBirth = : dateOfBirth, Email = :email, Phone = :phone, Password = :password, Gender = :gender, Avatar =:avatar, Adresse = :adresse, AgentID = :agentID, AdminID = :adminID 
+                    SET FirstName = :firstName, LastName = :lastName, DateOfBirth = :dateOfBirth, Email = :email, Phone = :phone, Gender = :gender, Avatar = :avatar, Adresse = :adresse, AgentID = :agentID, AdminID = :adminID 
                     WHERE ClientID = :clientID 
                     ";
             $stmt = $pdo->prepare($req);
@@ -66,8 +66,7 @@ class Client
             $stmt->bindParam(':lastName', $this->LastName, PDO::PARAM_STR);
             $stmt->bindParam(':dateOfBirth', $this->DateOfBirth, PDO::PARAM_STR);
             $stmt->bindParam(':email', $this->Email, PDO::PARAM_STR);
-            $stmt->bindParam(':phone', $this->Phone, PDO::PARAM_STR);
-            $stmt->bindParam(':password', $this->Password, PDO::PARAM_STR);
+            $stmt->bindParam(':phone', $this->Phone, PDO::PARAM_INT);
             $stmt->bindParam(':gender', $this->Gender, PDO::PARAM_STR);
             $stmt->bindParam(':avatar', $this->Avatar, PDO::PARAM_STR);
             $stmt->bindParam(':adresse', $this->Adresse, PDO::PARAM_STR);
@@ -106,6 +105,22 @@ class Client
             }
         } catch (PDOException $e) {
             error_log('Error getting Client: ' . $e->getMessage());
+        }
+    }
+    public function getAllClient($pdo)
+    {
+        try {
+            $req = "SELECT * FROM Clients";
+            $stmt = $pdo->prepare($req);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            error_log('Error getting All Client: ' . $e->getMessage());
         }
     }
 }

@@ -28,3 +28,6 @@ try {
 } catch (PDOException $e) {
     die("Database connection failed: " . $e->getMessage());
 }
+
+$PORT = 8000;
+$URL = "http://localhost" . ":" . $PORT;

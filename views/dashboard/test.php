@@ -1,35 +1,3 @@
-<?php
-require('./config/config.php');
-require('./src/Models/Client.php');
-require('./src/Models/Agent.php');
-
-$query = new QueryManager($pdo);
-$nbrStudents = $query->getStudentsCount();
-$nbrEmployee = $query->getEmployeeCount();
-$nbrPupils = $query->getPupilsCount();
-
-$agents = new Agent("", "", "", "", "");
-$nbrAgents = $agents->getNbrAgents($pdo);
-
-
-session_start();
-session_regenerate_id();
-
-
-if (!isset($_SESSION['username']))      // if there is no valid session
-{
-    header("Location: admin/login");
-}
-
-
-$parts = explode('_', $_SESSION['username']);
-$id = $parts[0];
-
-
-
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,7 +7,7 @@ $id = $parts[0];
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs2@1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <title>Admin</title>
+    <title>My Profile</title>
 </head>
 
 <body class="bg-violet-100">
@@ -60,29 +28,23 @@ $id = $parts[0];
                         <h3 class="font-bold text-xl  text-blue-900">Total Subscription</h3>
                     </div>
                     <div class="card bg-white w-[600px] h-[100px] rounded-[10px] mb-1 relative">
-                        <div class="sub-div flex flex-col bg-blue-800 w-1/4 h-full rounded-l-[10px]  float-left flex items-center justify-center">
+                        <div class="sub-div bg-blue-800 w-1/4 h-full rounded-l-[10px]  float-left flex items-center justify-center">
                             <p class="text-white">Pupils</p>
-                            <span class="text-white font-semibold text-4xl"><?php echo $nbrPupils; ?></span>
                         </div>
-                        <div class="sub-div flex flex-col bg-blue-800 w-1/4 h-full float-left flex items-center justify-center">
+                        <div class="sub-div bg-blue-600 w-1/4 h-full float-left flex items-center justify-center">
                             <p class="text-white">Students</p>
-                            <span class="text-white font-semibold text-4xl"><?php echo $nbrStudents; ?></span>
                         </div>
-                        <div class="sub-div flex flex-col bg-blue-800 w-1/4 h-full float-left flex items-center justify-center">
+                        <div class="sub-div bg-blue-400 w-1/4 h-full float-left flex items-center justify-center">
                             <p class="text-white">Employees</p>
-                            <span class="text-white font-semibold text-4xl"><?php echo $nbrEmployee; ?></span>
                         </div>
-                        <div class="sub-div flex flex-col bg-blue-800 w-1/4 h-full rounded-r-[10  px] float-left flex items-center justify-center">
+                        <div class="sub-div bg-blue-200 w-1/4 h-full rounded-r-[10  px] float-left flex items-center justify-center">
                             <p class="text-white">Agents</p>
-                            <span class="text-white font-semibold text-4xl"><?php echo $nbrAgents; ?></span>
                         </div>
                     </div>
                     <div class="w-[600px] border-b-2 border-blue-900">
                         <h3 class="font-bold text-xl  text-blue-900">Lign Chart</h3>
                     </div>
-                    <div class="card bg-white w-[600px] h-[250px] rounded-[10px] mb-1 relative">
-                        <img src="../../assets/ligne-chart.png" alt="">
-                    </div>
+                    <div class="card bg-white w-[600px] h-[250px] rounded-[10px] mb-1 relative"></div>
 
 
 
@@ -96,17 +58,13 @@ $id = $parts[0];
                         <div class="w-[450px] border-b-2 border-blue-900 ">
                             <h3 class="font-bold text-xl  text-blue-900 ">Bar Chart</h3>
                         </div>
-                        <div class="card bg-white w-[450px] h-[200px] rounded-[10px] mb-2 relative">
-                            <img src="../../assets/bar-chart.png" class="w-[450px] h-[200px]" alt="">
-                        </div>
+                        <div class="card bg-white w-[450px] h-[250px] rounded-[10px] mb-2 relative"></div>
                     </div>
                     <div class="flex flex-col gap-4 mb-2">
                         <div class="w-[450px] border-b-2 border-blue-900">
                             <h3 class="font-bold text-xl  text-blue-900">Pie Chart</h3>
                         </div>
-                        <div class="card bg-white w-[450px] h-[200px] rounded-[10px] mb-2 relative">
-                            <img src="../../assets/pie-chart.png" class="w-[450px] h-[200px]" alt="">
-                        </div>
+                        <div class="card bg-white w-[450px] h-[250px] rounded-[10px] mb-2 relative"></div>
                     </div>
                 </div>
             </div>

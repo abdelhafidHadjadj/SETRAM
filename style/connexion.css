@@ -1,0 +1,83 @@
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+
+.loginSection {
+    display: flex;
+    background-image: url(../assets/tramway-doran-730x430.png);
+    background-size: cover;
+    height: 100%;
+}
+.firstPart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 45%;
+    gap: 60px;
+    height: 100%;
+    background-color: var(--primary-color);
+    border-radius: 0 25px 25px 0;
+}
+.secondPart {
+    width: 55%;
+    height: 100%;
+}
+
+.logoBox img {
+    width: 200px;
+
+}
+.formBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+    width: 60%;
+}
+.formBox form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    padding: 1rem;
+}
+.usernameBox {
+    display: flex;
+ justify-content: space-between; 
+   width: 100%;
+}
+.usernameBox .inputBox{
+    width: 48%;
+}
+.checkTermsBox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 25px;
+}
+.alreadyExistBox {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+    .firstPart {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 60%;
+        height: 100%;
+        background-color: var(--primary-color);
+        border-radius: 0 25px 25px 0;
+    
+    }
+    .secondPart {
+        display: none !important;
+    }
+  }

@@ -64,6 +64,24 @@ class Card
         }
     }
 
+    public function getAllCards($pdo)
+    {
+        try {
+            $req = "SELECT * FROM Cardsubscription";
+            $stmt = $pdo->prepare($req);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            error_log('Error getting All Card: ' . $e->getMessage());
+        }
+    }
+
+
     public function deleteCard($pdo, $cardID)
     {
         try {

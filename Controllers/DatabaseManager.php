@@ -11,6 +11,7 @@ class DataBaseManger
             AdminID INT AUTO_INCREMENT,
             FirstName varchar(50),
             LastName varchar(50),
+            Phone INT,
             Email varchar(50),
             Password varchar(255),
             PRIMARY KEY (`AdminID`)
@@ -21,7 +22,7 @@ class DataBaseManger
             AgentID INT AUTO_INCREMENT,
             FirstName varchar(50),
             LastName varchar(50),
-            DateOfBirth DATE,
+            Phone INT,
             Email varchar(50),
             Password varchar(255),
             AdminId INT,
@@ -86,16 +87,17 @@ class DataBaseManger
             PRIMARY KEY (`CardID`),
             FOREIGN KEY (ClientID) REFERENCES Clients(ClientID),
             FOREIGN KEY (SubscriptionID) REFERENCES Subscriptions(SubscriptionID),
+            FOREIGN KEY (AgentID) REFERENCES Agents(AgentID),
             UNIQUE(CardNumber)
         )
         ";
 
         $x = $pdo->prepare($sql);
         $e = $x->execute();
-        if ($e) {
-            echo "Tables created successfully";
-        } else {
-            echo "Tables creation failed";
-        }
+        // if ($e) {
+        //     echo "Tables created successfully";
+        // } else {
+        //     echo "Tables creation failed";
+        // }
     }
 }
